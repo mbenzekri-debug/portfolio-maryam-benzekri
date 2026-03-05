@@ -2,11 +2,13 @@
 
 :root {
   --bg: #0a0f1e;
+  --bg-soft: #0f1730;
   --bg-elevated: rgba(16, 24, 46, 0.6);
   --text: #f3f7ff;
   --muted: #9aa7c7;
   --primary: #8b5cf6;
   --accent: #22d3ee;
+  --accent-2: #f472b6;
   --success: #22c55e;
   --warning: #f59e0b;
   --border: rgba(255, 255, 255, 0.14);
@@ -29,9 +31,27 @@ html {
 body {
   margin: 0;
   color: var(--text);
-  background: var(--bg);
+  background:
+    radial-gradient(circle at 12% 10%, rgba(34, 211, 238, 0.1), transparent 38%),
+    radial-gradient(circle at 88% 82%, rgba(244, 114, 182, 0.1), transparent 42%),
+    linear-gradient(145deg, var(--bg-soft) 0%, var(--bg) 62%);
   font-family: var(--font-sans);
   min-height: 100vh;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(139, 92, 246, 0.7), rgba(34, 211, 238, 0.7));
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.04);
 }
 
 ::selection {
@@ -76,6 +96,15 @@ textarea:focus-visible {
     linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
   background-size: 34px 34px;
   z-index: -3;
+  mask-image: radial-gradient(circle at center, rgba(0, 0, 0, 0.95), transparent 85%);
+}
+
+.bg-grid::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 30%, transparent 70%, rgba(255, 255, 255, 0.02));
+  pointer-events: none;
 }
 
 .orb {
@@ -118,6 +147,20 @@ textarea:focus-visible {
 .section-title {
   font-size: clamp(1.5rem, 2.7vw, 2.5rem);
   margin: 0 0 1.5rem;
+  position: relative;
+  letter-spacing: 0.01em;
+  width: fit-content;
+}
+
+.section-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.45rem;
+  width: 66%;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--primary), var(--accent), transparent);
 }
 
 .mono {
@@ -126,21 +169,31 @@ textarea:focus-visible {
 
 .gradient-text {
   background: var(--gradient-main);
+  background-size: 180% 180%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  animation: textFlow 6s ease infinite;
 }
 
 .glass {
-  background: var(--bg-elevated);
+  background:
+    linear-gradient(140deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.015) 28%, rgba(255, 255, 255, 0.03) 100%),
+    var(--bg-elevated);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  backdrop-filter: blur(12px);
-  box-shadow: var(--shadow);
+  backdrop-filter: blur(16px) saturate(120%);
+  box-shadow:
+    var(--shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .card-hover {
-  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    transform 0.28s cubic-bezier(0.2, 0.7, 0.2, 1),
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    filter 0.25s ease;
   position: relative;
   overflow: hidden;
 }
@@ -157,25 +210,44 @@ textarea:focus-visible {
   transition: transform 0.25s ease;
 }
 
+.card-hover::after {
+  content: "";
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  top: -90px;
+  right: -90px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.2), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.28s ease;
+  pointer-events: none;
+}
+
 .card-hover:hover {
-  transform: translateY(-4px);
+  transform: translateY(-6px) scale(1.01);
   border-color: rgba(139, 92, 246, 0.48);
   box-shadow: var(--glow);
+  filter: saturate(1.06);
 }
 
 .card-hover:hover::before {
   transform: scaleX(1);
 }
 
+.card-hover:hover::after {
+  opacity: 1;
+}
+
 [data-reveal] {
   opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.45s ease, transform 0.45s ease;
+  transform: translateY(24px) scale(0.985);
+  transition: opacity 0.45s ease, transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
 [data-reveal].is-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 
 @keyframes drift {
@@ -194,5 +266,27 @@ textarea:focus-visible {
 
   .section {
     margin-bottom: 3.5rem;
+  }
+}
+
+@keyframes textFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
   }
 }
