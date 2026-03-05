@@ -125,7 +125,7 @@ export const profile = {
     subtitle: "Passionnée par le développement logiciel et la création de projets web modernes",
     availability: "Disponible pour un stage",
     location: "Maroc",
-    avatar: "/avatar-placeholder.svg",
+    avatar: "https://avatars.githubusercontent.com/u/254163975?v=4",
     emails: ["m.benzekri@esisa.ac.ma"],
     phone: "",
     cvUrl: ""
@@ -138,8 +138,8 @@ export const profile = {
   ],
 
   stats: [
-    { label: "Projets", value: "0" },
-    { label: "Technologies", value: "0" },
+    { label: "Projets", value: "1" },
+    { label: "Technologies", value: "8" },
     { label: "Certifications", value: "0" },
     { label: "Années d'études", value: "1" }
   ] satisfies Stat[],
@@ -148,7 +148,17 @@ export const profile = {
     {
       name: "Programming",
       icon: "code",
-      skills: []
+      skills: ["TypeScript", "JavaScript", "HTML", "CSS"]
+    },
+    {
+      name: "Frameworks",
+      icon: "globe",
+      skills: ["Astro"]
+    },
+    {
+      name: "Tools & Deployment",
+      icon: "tool",
+      skills: ["Git", "GitHub", "Vercel"]
     }
   ] satisfies TechnicalSkillCategory[],
 
@@ -162,7 +172,15 @@ export const profile = {
 
   certifications: [] as CertificationItem[],
 
-  projects: [] as ProjectItem[],
+  projects: [
+    {
+      title: "Portfolio Maryam Benzekri",
+      url: "https://github.com/mbenzekri-debug/portfolio-maryam-benzekri",
+      description:
+        "Portfolio personnel moderne développé avec Astro et déployé sur Vercel, avec sections dynamiques pilotées par un fichier TypeScript centralisé.",
+      tags: ["Astro", "TypeScript", "CSS", "Vercel", "GitHub"]
+    }
+  ] as ProjectItem[],
 
   social: [
     {
