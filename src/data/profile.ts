@@ -123,7 +123,7 @@ export const profile = {
     lastName: "Benzekri",
     title: "Étudiante en Ingénierie Logicielle (1ère année)",
     subtitle: "Passionnée par le développement logiciel et la création de projets web modernes",
-    availability: "Disponible pour un stage",
+    availability: "Étudiante en 1ère année d'ingénierie logicielle",
     location: "Maroc",
     avatar: "/avatar-maryam.jpg",
     emails: ["m.benzekri@esisa.ac.ma"],
