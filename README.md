@@ -81,7 +81,7 @@ vercel --yes --prod
 
 ## URL personnalisée
 
-1. Définir l'alias final dans `vercel.json` au format : `portfolio-prenom-nom.vercel.app`
+1. Définir l'alias final dans `vercel.json` : `portfolio-maryam-benzekri.vercel.app`
 2. Lier l'alias au dernier déploiement :
 
 ```powershell
