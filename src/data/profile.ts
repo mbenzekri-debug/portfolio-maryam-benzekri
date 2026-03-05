@@ -125,7 +125,7 @@ export const profile = {
     subtitle: "Passionnée par le développement logiciel et la création de projets web modernes",
     availability: "Disponible pour un stage",
     location: "Maroc",
-    avatar: "/avatar-placeholder.svg",
+    avatar: "/avatar-maryam.jpg",
     emails: ["m.benzekri@esisa.ac.ma"],
     phone: "",
     cvUrl: ""
