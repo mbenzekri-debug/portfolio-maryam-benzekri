@@ -1,0 +1,294 @@
+---
+/**
+ * Sticky header with dynamic navigation, active-link tracking and mobile drawer menu.
+ */
+import type { NavItem, SocialItem, IconName } from "../data/profile";
+
+type Props = {
+  navItems: NavItem[];
+  fullName: string;
+  social: SocialItem[];
+};
+
+const { navItems, fullName, social } = Astro.props;
+
+const icons: Record<IconName | SocialItem["icon"] | "menu" | "x", string> = {
+  home: "M3 12l9-9 9 9M5 10v10h14V10",
+  user: "M20 21a8 8 0 1 0-16 0M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z",
+  code: "M8 17l-5-5 5-5M16 7l5 5-5 5",
+  graduation: "M22 10L12 5 2 10l10 5 10-5zM6 12.5v4c0 2 3 3.5 6 3.5s6-1.5 6-3.5v-4",
+  briefcase: "M3 7h18v12H3zM8 7V5h8v2",
+  book: "M4 19a2 2 0 0 0 2 2h14V5H6a2 2 0 0 0-2 2v12z",
+  badge: "M12 2l3 6 6 .9-4.5 4.4 1.1 6.2L12 16l-5.6 3.5 1.1-6.2L3 8.9 9 8z",
+  folder: "M3 6h6l2 2h10v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z",
+  mail: "M4 6h16v12H4zM4 8l8 5 8-5",
+  github: "M9 19c-5 1.5-5-2.5-7-3m14 6v-4a3.5 3.5 0 0 0-1-2.5c3.3-.4 6.8-1.6 6.8-7.2A5.7 5.7 0 0 0 20 4.8 5.2 5.2 0 0 0 19.9 1s-1.3-.4-4.2 1.6a14.5 14.5 0 0 0-7.6 0C5.2.6 3.9 1 3.9 1A5.2 5.2 0 0 0 3.8 4.8a5.7 5.7 0 0 0-1.5 3.9c0 5.6 3.5 6.8 6.8 7.2a3.5 3.5 0 0 0-1 2.5v4",
+  linkedin: "M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 1 0-4 0v7h-4V9h4v2a5 5 0 0 1 2-1zM2 9h4v12H2zM4 4a2 2 0 1 1 0 4 2 2 0 0 1 0-4z",
+  twitter: "M22 5.9a8.5 8.5 0 0 1-2.5.7 4.3 4.3 0 0 0 1.9-2.4 8.7 8.7 0 0 1-2.8 1.1 4.3 4.3 0 0 0-7.4 3 4 4 0 0 0 .1 1A12.3 12.3 0 0 1 3 5.2a4.3 4.3 0 0 0 1.3 5.7 4.2 4.2 0 0 1-2-.6v.1a4.3 4.3 0 0 0 3.5 4.2 4.3 4.3 0 0 1-1.9.1 4.3 4.3 0 0 0 4 3 8.6 8.6 0 0 1-5.4 1.9A9 9 0 0 1 2 19a12.2 12.2 0 0 0 6.6 1.9c8 0 12.3-6.6 12.3-12.3v-.6A8.7 8.7 0 0 0 22 5.9z",
+  globe: "M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm-8 10h16M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z",
+  scholar: "M12 3L2 9l10 6 10-6-10-6zm0 8.2L4.4 9 12 4.8 19.6 9 12 11.2zM4 12v4l8 5 8-5v-4",
+  orcid: "M4 4h5v16H4zM11 8h5a4 4 0 1 1 0 8h-5z",
+  researchgate: "M4 19V5h8a4 4 0 1 1 0 8h-4l6 6",
+  menu: "M3 6h18M3 12h18M3 18h18",
+  x: "M6 6l12 12M18 6 6 18"
+};
+---
+
+<header class="header" id="site-header">
+  <div class="container header__inner">
+    <a href="#hero" class="header__logo">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.5 7L23 10l-5.5 5 1.5 7L12 18l-7 4 1.5-7L1 10l7.5-1z" /></svg>
+      <span>{fullName}</span>
+    </a>
+
+    <nav class="header__nav" aria-label="Navigation principale">
+      {navItems.map((item) => (
+        <a href={`#${item.id}`} data-nav-link={item.id}>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d={icons[item.icon]} /></svg>
+          <span>{item.label}</span>
+        </a>
+      ))}
+    </nav>
+
+    <button class="header__toggle" id="menu-toggle" aria-expanded="false" aria-controls="mobile-drawer" aria-label="Ouvrir le menu">
+      <svg viewBox="0 0 24 24" class="icon-menu"><path d={icons.menu} /></svg>
+      <svg viewBox="0 0 24 24" class="icon-close"><path d={icons.x} /></svg>
+    </button>
+  </div>
+
+  <div class="drawer-backdrop" id="drawer-backdrop" hidden></div>
+  <aside class="mobile-drawer" id="mobile-drawer" aria-hidden="true">
+    <nav class="mobile-drawer__nav" aria-label="Navigation mobile">
+      {navItems.map((item) => (
+        <a href={`#${item.id}`} data-nav-link={item.id}>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d={icons[item.icon]} /></svg>
+          <span>{item.label}</span>
+        </a>
+      ))}
+    </nav>
+    {social.length > 0 && (
+      <div class="mobile-drawer__socials">
+        {social.map((item) => (
+          <a href={item.url} target="_blank" rel="noreferrer noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d={icons[item.icon]} /></svg>
+            <span>{item.label}</span>
+          </a>
+        ))}
+      </div>
+    )}
+  </aside>
+</header>
+
+<script is:inline>
+  // Handles drawer open/close, body scroll lock, active links and header shrink.
+  const header = document.getElementById("site-header");
+  const toggle = document.getElementById("menu-toggle");
+  const drawer = document.getElementById("mobile-drawer");
+  const backdrop = document.getElementById("drawer-backdrop");
+  const body = document.body;
+  let isMenuOpen = false;
+
+  const setMenuState = (open) => {
+    isMenuOpen = open;
+    toggle?.setAttribute("aria-expanded", String(open));
+    drawer?.setAttribute("aria-hidden", String(!open));
+    drawer?.classList.toggle("is-open", open);
+    backdrop?.toggleAttribute("hidden", !open);
+    body.classList.toggle("body-locked", open);
+  };
+
+  toggle?.addEventListener("click", () => setMenuState(!isMenuOpen));
+  backdrop?.addEventListener("click", () => setMenuState(false));
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && isMenuOpen) setMenuState(false);
+  });
+
+  drawer?.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => setMenuState(false));
+  });
+
+  const sectionObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const id = entry.target.getAttribute("id");
+        if (!id) return;
+        document.querySelectorAll("[data-nav-link]").forEach((link) => {
+          link.classList.toggle("is-active", link.getAttribute("data-nav-link") === id);
+        });
+      });
+    },
+    { threshold: 0.6 }
+  );
+
+  document.querySelectorAll("main section[id]").forEach((section) => sectionObserver.observe(section));
+
+  const onScroll = () => {
+    header?.classList.toggle("is-shrink", window.scrollY > 40);
+  };
+
+  window.addEventListener("scroll", () => requestAnimationFrame(onScroll), { passive: true });
+</script>
+
+<style>
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    backdrop-filter: blur(14px);
+    background: rgba(10, 15, 30, 0.52);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    transition: padding 0.2s ease, background 0.2s ease;
+  }
+
+  .header.is-shrink {
+    background: rgba(10, 15, 30, 0.75);
+  }
+
+  .header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 4.2rem;
+  }
+
+  .header__logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-weight: 700;
+  }
+
+  .header__logo svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    fill: none;
+    stroke: #8b5cf6;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .header__nav {
+    display: inline-flex;
+    gap: 0.6rem;
+  }
+
+  .header__nav a,
+  .mobile-drawer__nav a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #c8d4ee;
+    border-radius: 999px;
+    padding: 0.45rem 0.8rem;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+  }
+
+  .header__nav a:hover,
+  .header__nav a.is-active,
+  .mobile-drawer__nav a:hover,
+  .mobile-drawer__nav a.is-active {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(139, 92, 246, 0.18);
+  }
+
+  .header__nav svg,
+  .mobile-drawer__nav svg,
+  .mobile-drawer__socials svg {
+    width: 1rem;
+    height: 1rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .header__toggle {
+    display: none;
+    width: 2.6rem;
+    height: 2.6rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0.75rem;
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+    position: relative;
+  }
+
+  .icon-close {
+    display: none;
+  }
+
+  .header__toggle[aria-expanded="true"] .icon-menu {
+    display: none;
+  }
+
+  .header__toggle[aria-expanded="true"] .icon-close {
+    display: block;
+  }
+
+  .drawer-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(3, 6, 14, 0.6);
+    backdrop-filter: blur(6px);
+    z-index: 110;
+  }
+
+  .mobile-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: min(88vw, 360px);
+    height: 100dvh;
+    background: rgba(10, 15, 30, 0.94);
+    border-left: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(14px);
+    transform: translateX(102%);
+    transition: transform 0.25s ease;
+    z-index: 120;
+    padding: 5.5rem 1.2rem 1.2rem;
+    display: grid;
+    align-content: start;
+    gap: 1rem;
+  }
+
+  .mobile-drawer.is-open {
+    transform: translateX(0);
+  }
+
+  .mobile-drawer__nav,
+  .mobile-drawer__socials {
+    display: grid;
+    gap: 0.55rem;
+  }
+
+  .mobile-drawer__socials a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: #d7e0f8;
+  }
+
+  :global(body.body-locked) {
+    overflow: hidden;
+  }
+
+  @media (max-width: 768px) {
+    .header__nav {
+      display: none;
+    }
+
+    .header__toggle {
+      display: inline-flex;
+    }
+  }
+</style>

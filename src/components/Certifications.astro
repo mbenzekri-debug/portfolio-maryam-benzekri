@@ -1,0 +1,38 @@
+---
+/**
+ * Certifications and online courses cards.
+ */
+import { certifications } from "../utils/view-model";
+
+const iconMap: Record<string, string> = {
+  award: "M12 2l3 6 6 .9-4.5 4.4 1.1 6.2L12 16l-5.6 3.5 1.1-6.2L3 8.9 9 8z",
+  book: "M4 19a2 2 0 0 0 2 2h14V5H6a2 2 0 0 0-2 2v12z",
+  graduation: "M22 10L12 5 2 10l10 5 10-5zM6 12.5v4c0 2 3 3.5 6 3.5s6-1.5 6-3.5v-4"
+};
+---
+
+<section id="certifications" class="section container" data-reveal>
+  <h2 class="section-title">Certifications</h2>
+  <div class="cert-grid">
+    {certifications.map((item) => (
+      <article class="glass card-hover cert-card">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d={iconMap[item.icon]} /></svg>
+        <h3>{item.title}</h3>
+        <p>{item.issuerUrl ? <a href={item.issuerUrl} target="_blank" rel="noreferrer noopener">{item.issuer} ↗</a> : item.issuer}</p>
+        <p class="mono">{item.date}</p>
+        <div class="cert-tags">{item.skills.map((skill) => <span>{skill}</span>)}</div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .cert-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1rem; }
+  .cert-card { padding: 1rem; }
+  .cert-card svg { width: 1.3rem; height: 1.3rem; fill: none; stroke: #a78bfa; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .cert-card p { margin: .35rem 0; color: var(--muted); }
+  .cert-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .4rem; }
+  .cert-tags span { border: 1px solid var(--border); border-radius: 999px; padding: .2rem .55rem; font-size: .8rem; }
+  @media (max-width: 992px) { .cert-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+  @media (max-width: 768px) { .cert-grid { grid-template-columns: 1fr; } }
+</style>

@@ -1,0 +1,42 @@
+---
+/**
+ * Education timeline section.
+ */
+import { education } from "../utils/view-model";
+---
+
+<section id="education" class="section container" data-reveal>
+  <h2 class="section-title">Éducation</h2>
+  <div class="edu-list">
+    {education.map((item, index) => (
+      <article class="glass card-hover edu-card">
+        <span class="edu-card__dot"></span>
+        <div class="edu-card__body">
+          <div class="edu-card__meta">
+            <span class="mono">{item.period}</span>
+            {index === 0 && <span class="badge">Latest</span>}
+          </div>
+          <h3>{item.degree}</h3>
+          <p class="edu-card__field">{item.field}</p>
+          <p>
+            {item.institutionUrl ? <a href={item.institutionUrl} target="_blank" rel="noreferrer noopener">{item.institution} ↗</a> : item.institution}
+          </p>
+          <p>{item.description}</p>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .edu-list { position: relative; display: grid; gap: 1rem; }
+  .edu-list::before { content: ""; position: absolute; left: 14px; top: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, rgba(139,92,246,.6), transparent); }
+  .edu-card { position: relative; display: grid; grid-template-columns: 28px 1fr; gap: .8rem; padding: .95rem; }
+  .edu-card__dot { width: 14px; height: 14px; border-radius: 50%; background: var(--gradient-main); margin-top: .3rem; box-shadow: 0 0 0 7px rgba(139,92,246,.15); animation: glow 2s ease infinite; }
+  .edu-card__meta { display: flex; gap: .5rem; align-items: center; }
+  .badge { border-radius: 999px; border: 1px solid var(--border); padding: .1rem .5rem; font-size: .75rem; }
+  .edu-card__field { color: #a78bfa; margin: .35rem 0; }
+  .edu-card p { color: var(--muted); margin: .3rem 0 0; }
+  @keyframes glow { 0%,100% { box-shadow: 0 0 0 7px rgba(139,92,246,.12);} 50% { box-shadow: 0 0 0 10px rgba(139,92,246,.22);} }
+  @media (max-width: 768px) { .edu-list::before { display: none; } .edu-card { grid-template-columns: 1fr; } .edu-card__dot { display: none; } }
+</style>

@@ -1,0 +1,77 @@
+---
+/**
+ * Publications split by first-author and co-author groups with metrics.
+ */
+import { firstAuthorPublications, coAuthorPublications, publicationMetrics, profile } from "../utils/view-model";
+---
+
+<section id="publications" class="section container" data-reveal>
+  <h2 class="section-title">Publications</h2>
+
+  <div class="pub-metrics glass">
+    <div><span>Total Papers</span><strong class="gradient-text">{publicationMetrics.totalPapers}</strong></div>
+    <div><span>First Author</span><strong class="gradient-text">{publicationMetrics.firstAuthor}</strong></div>
+    <div><span>Co-Author</span><strong class="gradient-text">{publicationMetrics.coAuthor}</strong></div>
+    <div><span>Citations</span><strong class="gradient-text">{publicationMetrics.citations}</strong></div>
+  </div>
+
+  {firstAuthorPublications.length > 0 && (
+    <>
+      <div class="divider"><span>First Author</span></div>
+      <div class="pub-list">
+        {firstAuthorPublications.map((paper) => (
+          <article class="glass card-hover pub-card pub-card--first">
+            <span class="mono">{paper.year}</span>
+            <h3>{paper.url ? <a href={paper.url} target="_blank" rel="noreferrer noopener">{paper.title} ↗</a> : paper.title}</h3>
+            <p><em>{paper.journal}</em></p>
+            <p>{paper.authors.join(", ")}</p>
+            {paper.doi && <p class="mono">DOI: {paper.doi}</p>}
+          </article>
+        ))}
+      </div>
+    </>
+  )}
+
+  {coAuthorPublications.length > 0 && (
+    <>
+      <div class="divider"><span>Co-Author</span></div>
+      <div class="pub-list">
+        {coAuthorPublications.map((paper) => (
+          <article class="glass card-hover pub-card pub-card--co">
+            <span class="mono">{paper.year}</span>
+            <h3>{paper.url ? <a href={paper.url} target="_blank" rel="noreferrer noopener">{paper.title} ↗</a> : paper.title}</h3>
+            <p><em>{paper.journal}</em></p>
+            <p>{paper.authors.join(", ")}</p>
+            {paper.doi && <p class="mono">DOI: {paper.doi}</p>}
+          </article>
+        ))}
+      </div>
+    </>
+  )}
+
+  {(profile.academicProfiles.scholar || profile.academicProfiles.orcid || profile.academicProfiles.researchGate || profile.academicProfiles.scopus) && (
+    <div class="pub-links">
+      {profile.academicProfiles.scholar && <a href={profile.academicProfiles.scholar} target="_blank" rel="noreferrer noopener">Google Scholar</a>}
+      {profile.academicProfiles.orcid && <a href={profile.academicProfiles.orcid} target="_blank" rel="noreferrer noopener">ORCID</a>}
+      {profile.academicProfiles.researchGate && <a href={profile.academicProfiles.researchGate} target="_blank" rel="noreferrer noopener">ResearchGate</a>}
+      {profile.academicProfiles.scopus && <a href={profile.academicProfiles.scopus} target="_blank" rel="noreferrer noopener">Scopus</a>}
+    </div>
+  )}
+</section>
+
+<style>
+  .pub-metrics { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: .8rem; padding: .9rem; }
+  .pub-metrics span { color: var(--muted); font-size: .86rem; }
+  .pub-metrics strong { display: block; font-size: 1.3rem; }
+  .divider { position: relative; text-align: center; margin: 1rem 0; color: var(--muted); }
+  .divider::before { content: ""; position: absolute; inset: 50% 0 auto; border-top: 1px solid var(--border); }
+  .divider span { position: relative; background: var(--bg); padding: 0 .8rem; }
+  .pub-list { display: grid; gap: .8rem; }
+  .pub-card { padding: .9rem; border-left: 3px solid; }
+  .pub-card--first { border-left-color: #8b5cf6; }
+  .pub-card--co { border-left-color: #22d3ee; }
+  .pub-card p { margin: .35rem 0 0; color: var(--muted); }
+  .pub-links { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1rem; }
+  .pub-links a { border: 1px solid var(--border); border-radius: 999px; padding: .35rem .7rem; }
+  @media (max-width: 768px) { .pub-metrics { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+</style>

@@ -1,0 +1,26 @@
+---
+/**
+ * About section as numbered cards with accent stripe.
+ */
+import { profile } from "../utils/view-model";
+---
+
+<section id="about" class="section container" data-reveal>
+  <h2 class="section-title">À propos</h2>
+  <div class="about-grid">
+    {profile.about.map((paragraph, index) => (
+      <article class="glass card-hover about-card" style={`--delay:${index * 80}ms`}>
+        <span class="about-card__number mono">{String(index + 1).padStart(2, "0")}</span>
+        <p>{paragraph}</p>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .about-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+  .about-card { padding: 1rem; border-left: 3px solid transparent; border-image: var(--gradient-main) 1; animation-delay: var(--delay); }
+  .about-card__number { color: var(--muted); font-size: .86rem; display: block; margin-bottom: .45rem; }
+  .about-card p { margin: 0; color: #dce6fb; line-height: 1.7; }
+  @media (max-width: 768px) { .about-grid { grid-template-columns: 1fr; } }
+</style>

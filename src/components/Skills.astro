@@ -1,0 +1,80 @@
+---
+/**
+ * Skills section with technical categories and optional soft skills.
+ */
+import { technicalSkills, softSkills } from "../utils/view-model";
+
+const iconMap: Record<string, string> = {
+  code: "M8 17l-5-5 5-5M16 7l5 5-5 5",
+  database: "M4 6c0-1.7 3.6-3 8-3s8 1.3 8 3-3.6 3-8 3-8-1.3-8-3zm0 6c0 1.7 3.6 3 8 3s8-1.3 8-3M4 18c0 1.7 3.6 3 8 3s8-1.3 8-3",
+  globe: "M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z",
+  server: "M4 6h16v4H4zm0 8h16v4H4z",
+  tool: "M14.7 6.3a4 4 0 1 0-5.4 5.4l-6.8 6.8 2.8 2.8 6.8-6.8a4 4 0 0 0 5.4-5.4z",
+  cpu: "M9 9h6v6H9zM3 10h2M3 14h2M19 10h2M19 14h2M10 3v2M14 3v2M10 19v2M14 19v2",
+  users: "M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M16 3.1a4 4 0 0 1 0 7.8M23 21v-2a4 4 0 0 0-3-3.9",
+  message: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z",
+  target: "M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8",
+  sparkles: "M12 3l1.6 3.4L17 8l-3.4 1.6L12 13l-1.6-3.4L7 8l3.4-1.6z"
+};
+---
+
+<section id="skills" class="section container" data-reveal>
+  <h2 class="section-title">Compétences</h2>
+  <div class="divider"><span>Technical Skills</span></div>
+
+  <div class="skills-grid">
+    {technicalSkills.map((category) => (
+      <article class="glass card-hover skills-card">
+        <div class="skills-card__head">
+          <span class="skills-card__icon"><svg viewBox="0 0 24 24"><path d={iconMap[category.icon]} /></svg></span>
+          <div>
+            <h3>{category.name}</h3>
+            <span class="mono">{category.skills.length} skills</span>
+          </div>
+        </div>
+        <div class="skills-card__chips">
+          {category.skills.map((skill) => <span>{skill}</span>)}
+        </div>
+      </article>
+    ))}
+  </div>
+
+  {softSkills.length > 0 && (
+    <>
+      <div class="divider"><span>Soft Skills</span></div>
+      <div class="soft-grid">
+        {softSkills.map((item) => (
+          <article class="glass card-hover soft-card">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d={iconMap[item.icon]} /></svg>
+            <div>
+              <h3>{item.name}</h3>
+              <p>{item.description}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </>
+  )}
+</section>
+
+<style>
+  .divider { position: relative; text-align: center; margin: 1rem 0; color: var(--muted); }
+  .divider::before { content: ""; position: absolute; inset: 50% 0 auto; border-top: 1px solid var(--border); }
+  .divider span { position: relative; padding: 0 .8rem; background: var(--bg); }
+  .skills-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1rem; }
+  .skills-card { padding: 1rem; }
+  .skills-card__head { display: flex; gap: .7rem; align-items: center; margin-bottom: .8rem; }
+  .skills-card__icon { width: 2.2rem; height: 2.2rem; display: grid; place-items: center; border-radius: .65rem; border: 1px solid var(--border); background: rgba(139, 92, 246, .17); transition: transform .2s ease, box-shadow .2s ease; }
+  .skills-card:hover .skills-card__icon { transform: scale(1.08); box-shadow: var(--glow); }
+  .skills-card svg, .soft-card svg { width: 1.2rem; height: 1.2rem; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .skills-card h3, .soft-card h3 { margin: 0; }
+  .skills-card__chips { display: flex; flex-wrap: wrap; gap: .4rem; }
+  .skills-card__chips span { padding: .3rem .6rem; border: 1px solid var(--border); border-radius: 999px; font-size: .84rem; color: #d8e4ff; }
+  .soft-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 1rem; }
+  .soft-card { padding: .9rem; display: flex; gap: .7rem; }
+  .soft-card svg { color: #a78bfa; margin-top: .15rem; transition: transform .2s ease, filter .2s ease; }
+  .soft-card:hover svg { transform: scale(1.1); filter: drop-shadow(0 0 8px rgba(167, 139, 250, .5)); }
+  .soft-card p { margin: .4rem 0 0; color: var(--muted); }
+  @media (max-width: 992px) { .skills-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+  @media (max-width: 768px) { .skills-grid, .soft-grid { grid-template-columns: 1fr; } }
+</style>

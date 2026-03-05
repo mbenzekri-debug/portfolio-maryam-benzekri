@@ -1,0 +1,50 @@
+---
+/**
+ * Base layout wrapping all pages with global structure, visuals, and shared scripts.
+ */
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import BackToTop from "../components/BackToTop.astro";
+import { fullName, navItems, social, activeSections } from "../utils/view-model";
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={`Portfolio de ${fullName}`} />
+    <title>{fullName} | Portfolio</title>
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link">Aller au contenu</a>
+    <div class="bg-grid" aria-hidden="true"></div>
+    <div class="orb orb--one" aria-hidden="true"></div>
+    <div class="orb orb--two" aria-hidden="true"></div>
+
+    <Header navItems={navItems} fullName={fullName} social={social} />
+    <main id="main-content" class="site-main">
+      <slot />
+    </main>
+    <Footer navItems={navItems} fullName={fullName} social={social} activeSections={activeSections} />
+    <BackToTop />
+
+    <script is:inline>
+      // Global reveal animation using IntersectionObserver.
+      const revealObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.15 }
+      );
+
+      document.querySelectorAll("[data-reveal]").forEach((el) => revealObserver.observe(el));
+    </script>
+  </body>
+</html>
